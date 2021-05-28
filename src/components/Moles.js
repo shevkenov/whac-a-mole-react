@@ -2,7 +2,7 @@ import React from 'react'
 
 const Moles = ({children}) => {
     return (
-        <div>
+        <div className="moles">
             {children}
         </div>
     )

@@ -1,23 +1,24 @@
-import React from "react";
+import React, {useState, useEffect, useRef} from "react";
 
-function Time({ isStart, onEnd }) {
-  const TIME_LIMIT = 30000;
-  const INTERVAL = 1000;
-  const [timer, setTimer] = React.useState(TIME_LIMIT);
-
-  React.useEffect(() => {
-    const timerInterval = setInterval(() => {
-      setTimer((prevValue) => prevValue - INTERVAL);
-    }, INTERVAL);
-
-    return () => clearInterval(timerInterval);
-  }, [isStart, onEnd]);
-
-  React.useEffect(() => {
-    if (isStart && timer <= 0) onEnd();
-  }, [timer, onEnd, isStart]);
-
-  return <div>Time: {timer}</div>;
+function Time({ onEnd, time, interval = 1000 }) {
+  const [internalTime, setInternalTime] = useState(time)
+  const timerRef = useRef(time)  
+  const timeRef = useRef(time)
+  useEffect(() => {
+    if (internalTime === 0 && onEnd) {
+      onEnd()
+    }
+  }, [internalTime, onEnd])
+  useEffect(() => {
+    timerRef.current = setInterval(
+      () => setInternalTime((timeRef.current -= interval)),
+      interval
+    )
+    return () => {
+      clearInterval(timerRef.current)
+    }
+  }, [interval])
+  return <div>{`Time: ${internalTime / 1000}s`}</div>
 }
 
 export default Time;

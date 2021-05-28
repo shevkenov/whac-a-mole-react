@@ -1,9 +1,9 @@
 import React from 'react'
 
-function Score() {
+function Score({score}) {
     return (
         <div>
-            Score: 0
+            Score: {score}
         </div>
     )
 }
